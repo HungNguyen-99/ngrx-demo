@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Product } from 'src/app/models/product.model';
+import { selectAllProducts } from 'src/app/ngrxs/selectors/product.selector';
 
 @Component({
   selector: 'app-list-item',
@@ -9,7 +10,15 @@ import { Product } from 'src/app/models/product.model';
 })
 export class ListItemComponent {
 
-  product$ = this.store.select('products');
+  products: Product[] = []
 
-  constructor(private store: Store<{ products: Product[] }>) { }
+  constructor(
+    private store: Store<{ productStore: Product[] }>
+  ) { }
+
+  ngOnInit() {
+    this.store.select(selectAllProducts).subscribe(res => {
+      this.products = res;
+    })
+  }
 }
